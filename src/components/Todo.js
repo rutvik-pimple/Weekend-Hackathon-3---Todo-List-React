@@ -1,19 +1,72 @@
-import React from 'react'
+import { Checkbox, IconButton, ListItem, Typography } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import EditIcon from '@material-ui/icons/Edit';
+import { Button, TextField } from "@material-ui/core";
+import React,{useState} from "react";
 
-export default function Todo({todo, deleteTodo, toggleTodo}) {
-    function handleDelete(){
-        deleteTodo(todo.id);
-    }
-    function handleChange(){
-        toggleTodo(todo.id);
-    }
-    return (
-        <div>
-        <label>
-        <input type="checkbox" checked={todo.complete} onChange={handleChange}/>
+function Todo({ todo, toggleComplete, removeTodo }) {
+  const [enableEdit, setEnableEdit] = useState(false);
+  const [newTask,setTask] = useState({task:""})
+
+  function handleEditClick(){
+    setEnableEdit(true);
+  }
+
+  function handleTaskEdit(e){
+    setTask({task:e.target.value}) 
+    
+  }
+  
+  function submit(){
+    todo.task = newTask.task
+    setEnableEdit(false);
+  }
+
+  function handleCheckboxClick() {
+    toggleComplete(todo.id);
+  }
+
+  function handleRemoveClick() {
+    removeTodo(todo.id);
+  }
+
+  return (
+    <>
+    {enableEdit ? (
+      <>
+      <TextField
+        label="Task"
+        type="text"
+        name="task"
+        onChange={handleTaskEdit}
+      />
+      <Button onClick={submit}>Edit</Button>
+
+      </>
+    ):(
+      <>
+      <ListItem style={{ display: "flex" }}>
+      <Checkbox checked={todo.completed} onClick={handleCheckboxClick} />
+      <Typography
+        variant="body1"
+        style={{
+          textDecoration: todo.completed ? "line-through" : null
+        }}
+      >
         {todo.task}
-        <button onClick={handleDelete}>X</button>
-        </label>
-        </div>
-    )
+      </Typography>
+      <IconButton onClick={handleRemoveClick}>
+        <CloseIcon />
+      </IconButton>
+      <IconButton onClick={handleEditClick}>
+        <EditIcon />
+      </IconButton>
+    </ListItem>
+      </>
+    )}
+    </>
+  );
 }
+
+export default Todo;
+
