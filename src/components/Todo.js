@@ -1,45 +1,19 @@
-import React, { useState } from 'react';
-import TodoForm from './TodoForm';
+import React from 'react'
 
-
-const Todo = ({ todos, completeTodo, removeTodo, updateTodo }) => {
-  const [edit, setEdit] = useState({
-    id: null,
-    value: ''
-  });
-
-  const submitUpdate = value => {
-    updateTodo(edit.id, value);
-    setEdit({
-      id: null,
-      value: ''
-    });
-  };
-
-  if (edit.id) {
-    return <TodoForm edit={edit} onSubmit={submitUpdate} />;
-  }
-
-  return todos.map((todo, index) => (
-    <div
-      className="list"
-      key={index}
-    >
-      <div key={todo.id} onClick={() => completeTodo(todo.id)}>
-        {todo.text}
-      </div>
-      <div className='icons'>
-        <button
-          onClick={() => removeTodo(todo.id)}
-          className='delete btn'
-        >X</button>
-        <button
-          onClick={() => setEdit({ id: todo.id, value: todo.text })}
-          className='edit btn'
-        >edit</button>
-      </div>
-    </div>
-  ));
-};
-
-export default Todo;
+export default function Todo({todo, deleteTodo, toggleTodo}) {
+    function handleDelete(){
+        deleteTodo(todo.id);
+    }
+    function handleChange(){
+        toggleTodo(todo.id);
+    }
+    return (
+        <div>
+        <label>
+        <input type="checkbox" checked={todo.complete} onChange={handleChange}/>
+        {todo.task}
+        <button onClick={handleDelete}>X</button>
+        </label>
+        </div>
+    )
+}
