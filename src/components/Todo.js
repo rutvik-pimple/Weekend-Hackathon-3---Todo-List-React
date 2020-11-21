@@ -4,7 +4,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { Button, TextField } from "@material-ui/core";
 import React,{useState} from "react";
 
-function Todo({ todo, toggleComplete, removeTodo }) {
+function Todo({ todo, toggleComplete, removeTodo, editTodo }) {
   const [enableEdit, setEnableEdit] = useState(false);
   const [newTask,setTask] = useState({task:""})
 
@@ -18,7 +18,7 @@ function Todo({ todo, toggleComplete, removeTodo }) {
   }
   
   function submit(){
-    todo.task = newTask.task
+    editTodo(todo.id,newTask.task)
     setEnableEdit(false);
   }
 

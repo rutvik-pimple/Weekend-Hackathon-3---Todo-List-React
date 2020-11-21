@@ -41,6 +41,20 @@ function App() {
     );
   }
 
+  function editTodo(id,task) {
+    setTodos(
+      todos.map(todo => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            task: task
+          };
+        }
+        return todo;
+      })
+    );
+  }
+
   function removeTodo(id) {
     setTodos(todos.filter(todo => todo.id !== id));
   }
