@@ -1,8 +1,7 @@
-
 import React from "react";
 import Todo from "./Todo";
 
-function TodoList({ todos, removeTodo, toggleComplete }) {
+function TodoList({ todos, removeTodo, toggleComplete, editTodo }) {
   return (
     <>
       {todos.map(todo => (
@@ -12,6 +11,7 @@ function TodoList({ todos, removeTodo, toggleComplete }) {
           todo={todo}
           removeTodo={removeTodo}
           toggleComplete={toggleComplete}
+          editTodo={editTodo}
         />
       ))}
     </>

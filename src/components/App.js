@@ -69,6 +69,7 @@ function App() {
         todos={todos}
         removeTodo={removeTodo}
         toggleComplete={toggleComplete}
+        editTodo={editTodo}
       />
     </div>
   );
