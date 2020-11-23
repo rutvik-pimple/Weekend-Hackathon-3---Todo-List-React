@@ -1,76 +1,98 @@
-
-import React, { useEffect, useState } from "react";
-import "../styles/App.css";
-import TodoForm from "./TodoForm";
-import TodoList from "./TodoList";
-
-const LOCAL_STORAGE_KEY = "react-todo-list-todos";
+import React from "react";
+import "./../styles/App.css";
 
 function App() {
-  const [todos, setTodos] = useState([]);
+  const [tasks, setTasks] = React.useState([]);
+  const task = React.useRef();
+  const [taskString, setTaskString] = React.useState("");
+  const [editedTaskString, setEditedTaskString] = React.useState("");
+  const editedTask = React.useRef();
+  const [selectedTask, setSelectedTask] = React.useState(null);
 
-  useEffect(() => {
-    // fires when app component mounts to the DOM
-    const storageTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-    if (storageTodos) {
-      setTodos(storageTodos);
-    }
-  }, []);
+  const saveTask = () => {
+    if (taskString === "") return;
+    setTasks((tasks) => [
+      ...tasks,
+      {
+        id: taskString + tasks.length,
+        name: taskString
+      }
+    ]);
+    setTaskString("");
+  };
 
-  useEffect(() => {
-    // fires when todos array gets updated
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos));
-  }, [todos]);
+  const editTask = (id) => {
+    if (editedTaskString === "") return;
+    let tasksRep = tasks.map((task) => {
+      let newTask = { ...task };
+      if (task.id === id) newTask.name = editedTaskString;
+      return newTask;
+    });
+    setTasks((tasks) => tasksRep);
+    setSelectedTask(null);
+    setEditedTaskString("");
+  };
 
-  function addTodo(todo) {
-    // adds new todo to beginning of todos array
-    setTodos([todo, ...todos]);
-  }
+  const deleteTask = (id) => {
+    let tasksRep = tasks.filter((task) => task.id !== id);
+    setTasks((tasks) => tasksRep);
+  };
 
-  function toggleComplete(id) {
-    setTodos(
-      todos.map(todo => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            completed: !todo.completed
-          };
-        }
-        return todo;
-      })
-    );
-  }
+  const edit = (id) => {
+    setSelectedTask(id);
+  };
 
-  function editTodo(id,task) {
-    setTodos(
-      todos.map(todo => {
-        if (todo.id === id) {
-          return {
-            ...todo,
-            task: task
-          };
-        }
-        return todo;
-      })
-    );
-  }
+  const handleTaskChange = (e) => {
+    let value = e.target.value;
+    setTaskString(value);
+  };
 
-  function removeTodo(id) {
-    setTodos(todos.filter(todo => todo.id !== id));
-  }
+  const handleEdit = (e) => {
+    let value = e.target.value;
+    setEditedTaskString(value);
+  };
 
   return (
-    <div className="App">
-      <div style={{ padding: 16 }} variant="h1">
-        React Todo
-      </div>
-      <TodoForm addTodo={addTodo} />
-      <TodoList
-        todos={todos}
-        removeTodo={removeTodo}
-        toggleComplete={toggleComplete}
-        editTodo={editTodo}
-      />
+    <div id="main">
+      <textarea
+        id="task"
+        value={taskString}
+        onChange={handleTaskChange}
+        ref={task}
+        rows="4"
+        cols="50"
+      ></textarea>
+      <button id="btn" onClick={saveTask}>
+        save
+      </button>
+      <ol>
+        {tasks.map((task) => (
+          <li key={task.id}>
+            <span className="list">{task.name}</span>
+            <button className="delete" onClick={() => deleteTask(task.id)}>
+              delete
+            </button>
+            <button className="edit" onClick={() => edit(task.id)}>
+              edit
+            </button>
+            {selectedTask === task.id ? (
+              <>
+                <textarea
+                  ref={editedTask}
+                  value={editedTaskString}
+                  onChange={handleEdit}
+                  className="editTask"
+                  rows="4"
+                  cols="50"
+                ></textarea>
+                <button className="saveTask" onClick={() => editTask(task.id)}>
+                  save
+                </button>
+              </>
+            ) : null}
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }
