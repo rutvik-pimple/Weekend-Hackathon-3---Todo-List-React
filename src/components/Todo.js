@@ -1,7 +1,3 @@
-import { Checkbox, IconButton, ListItem, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import EditIcon from '@material-ui/icons/Edit';
-import { Button, TextField } from "@material-ui/core";
 import React,{useState} from "react";
 
 function Todo({ todo, toggleComplete, removeTodo, editTodo }) {
@@ -34,34 +30,34 @@ function Todo({ todo, toggleComplete, removeTodo, editTodo }) {
     <>
     {enableEdit ? (
       <>
-      <TextField
+      <input
         label="Task"
         type="text"
         name="task"
         onChange={handleTaskEdit}
       />
-      <Button onClick={submit}>Edit</Button>
+      <button onClick={submit}>Edit</button>
 
       </>
     ):(
       <>
-      <ListItem style={{ display: "flex" }}>
-      <Checkbox checked={todo.completed} onClick={handleCheckboxClick} />
-      <Typography
+      <div style={{ display: "flex" }}>
+      <input type="checkbox" checked={todo.completed} onClick={handleCheckboxClick} />
+      <div
         variant="body1"
         style={{
           textDecoration: todo.completed ? "line-through" : null
         }}
       >
         {todo.task}
-      </Typography>
-      <IconButton onClick={handleRemoveClick}>
-        <CloseIcon />
-      </IconButton>
-      <IconButton onClick={handleEditClick}>
-        <EditIcon />
-      </IconButton>
-    </ListItem>
+      </div>
+      <button onClick={handleRemoveClick}>
+        X
+      </button>
+      <button onClick={handleEditClick}>
+        E
+      </button>
+    </div>
       </>
     )}
     </>
